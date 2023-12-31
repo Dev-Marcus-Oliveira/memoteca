@@ -38,6 +38,7 @@ export class ListarPensamentoComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.carregarListaPensamentos();
       });
+    interval(10000);
   }
 
   ngOnDestroy(): void {
