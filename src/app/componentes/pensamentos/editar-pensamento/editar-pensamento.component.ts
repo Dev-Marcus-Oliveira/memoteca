@@ -1,4 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PensamentoService } from './../pensamento.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -41,7 +41,14 @@ export class EditarPensamentoComponent implements OnInit {
   }
 
   editarPensamento() {
-    this.service.editar(this.formulario.value).subscribe();
+    if (this.formulario.valid) {
+      this.service.editar(this.formulario.value).subscribe(() => {
+        // Recarrega o componente
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate(['/listarPensamento']);
+      });
+    }
   }
 
   cancelar() {
@@ -51,6 +58,8 @@ export class EditarPensamentoComponent implements OnInit {
   habilitarBotao(): string {
     if (this.formulario.valid) {
       return 'botao';
-    } else return 'botao__desabilitado';
+    } else {
+      return 'botao__desabilitado';
+    }
   }
 }

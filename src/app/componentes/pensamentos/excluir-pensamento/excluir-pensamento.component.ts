@@ -32,7 +32,12 @@ export class ExcluirPensamentoComponent implements OnInit {
 
   excluirPensamento() {
     if (this.pensamento.id) {
-      this.service.excluir(this.pensamento.id).subscribe();
+      this.service.excluir(this.pensamento.id).subscribe(() => {
+        // Recarrega o componente
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate(['/listarPensamento']);
+      });
     }
   }
 

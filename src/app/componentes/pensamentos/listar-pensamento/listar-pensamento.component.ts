@@ -28,14 +28,13 @@ export class ListarPensamentoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.carregarListaPensamentos();
-    this.setupAutoReload();
   }
 
   carregarMaisPensamentos() {
     this.service
       .listar(++this.paginaAtual, this.filtro, this.favoritos)
       .subscribe((listaPensamentos) => {
-        this.listaPensamentos.push(...this.listaPensamentos);
+        this.listaPensamentos.push(...listaPensamentos);
         if (!listaPensamentos.length) {
           this.haMaisPensamentos = false;
         }
@@ -48,15 +47,6 @@ export class ListarPensamentoComponent implements OnInit, OnDestroy {
       .subscribe((listaPensamentos) => {
         this.listaPensamentos = listaPensamentos;
       });
-  }
-
-  private setupAutoReload() {
-    interval(1000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.carregarListaPensamentos();
-      });
-    interval(10000);
   }
 
   ngOnDestroy(): void {

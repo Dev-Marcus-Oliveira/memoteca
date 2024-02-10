@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PensamentoService } from './../pensamento.service';
 import { Pensamento } from './../pensamento';
 import { Component, OnInit } from '@angular/core';
@@ -15,7 +15,8 @@ export class CriarPensamentoComponent implements OnInit {
   constructor(
     private service: PensamentoService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -37,9 +38,13 @@ export class CriarPensamentoComponent implements OnInit {
   }
 
   criarPensamento() {
-    console.log(this.formulario.get('autoria')?.errors);
     if (this.formulario.valid) {
-      this.service.criar(this.formulario.value).subscribe();
+      this.service.criar(this.formulario.value).subscribe(() => {
+        // Recarrega o componente
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate(['/listarPensamento']);
+      });
     }
   }
 
